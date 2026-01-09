@@ -1,6 +1,10 @@
 package org.example;
 
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadPoolProvider {
@@ -57,11 +61,3 @@ public class ThreadPoolProvider {
         }
     }
 }
-
-/*
- * References:
- * 1- Dr. Yad mentioned in the lectures that there should be one instance of the thread-pool provider for the whole program
- *   That's why we decided to utilize the Singleton Design Pattern
- * 2- We used this tutorial to implement the Singleton DP: https://www.digitalocean.com/community/tutorials/thread-safety-in-java-singleton-classes
- * 3- ChatGPT suggested this implementation of the shutdown() method to ensure graceful shutdown
- * */
