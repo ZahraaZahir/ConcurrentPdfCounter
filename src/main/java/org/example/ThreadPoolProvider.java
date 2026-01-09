@@ -20,8 +20,7 @@ public class ThreadPoolProvider {
                 THREAD_COUNT,
                 0L,
                 TimeUnit.MILLISECONDS,
-                workQueue
-        );
+                workQueue);
     }
 
     public static ThreadPoolProvider getInstance() {
@@ -58,6 +57,8 @@ public class ThreadPoolProvider {
         } catch (InterruptedException e) {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
+        } finally {
+            instance = null;
         }
     }
 }
