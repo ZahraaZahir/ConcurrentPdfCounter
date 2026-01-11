@@ -9,7 +9,7 @@ public class PdfCountLoggerTest {
     void should_StartWithZero_When_ScannerIsInitialized() {
         Object monitor = new Object();
         PdfCountLogger logger = new PdfCountLogger(monitor);
-        DirectoryScannerUsingThreadPool scanner = new DirectoryScannerUsingThreadPool("path", logger, monitor);
+        DirectoryScannerUsingThreadPool scanner = new DirectoryScannerUsingThreadPool("path", logger);
 
         assertEquals(0, scanner.getPdfCount());
     }
@@ -18,7 +18,7 @@ public class PdfCountLoggerTest {
     void should_IncrementCountByOne_When_NotifyIsCalledOnce() {
         Object monitor = new Object();
         PdfCountLogger logger = new PdfCountLogger(monitor);
-        DirectoryScannerUsingThreadPool scanner = new DirectoryScannerUsingThreadPool("path", logger, monitor);
+        DirectoryScannerUsingThreadPool scanner = new DirectoryScannerUsingThreadPool("path", logger);
 
         scanner.incrementAndNotify("TestThread");
 

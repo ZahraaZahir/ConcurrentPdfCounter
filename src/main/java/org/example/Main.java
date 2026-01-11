@@ -16,7 +16,7 @@ public class Main {
 
         CountDownLatch mainLatch = new CountDownLatch(1);
 
-        DirectoryScannerUsingThreadPool pool = new DirectoryScannerUsingThreadPool(path, logger, sharedLogMonitor);
+        DirectoryScannerUsingThreadPool pool = new DirectoryScannerUsingThreadPool(path, logger);
 
         new Thread(() -> {
             try {

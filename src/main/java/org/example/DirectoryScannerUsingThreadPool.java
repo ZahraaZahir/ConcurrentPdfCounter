@@ -1,18 +1,19 @@
 package org.example;
 
 import java.io.File;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DirectoryScannerUsingThreadPool implements DirectoryScanner {
     private final String directoryPath;
-    private volatile int pdfCount = 0;
+    private final AtomicInteger pdfCount = new AtomicInteger(0);
     private final PdfCountLogger logger;
-    private final Object sharedPdfDataMonitor;
 
-    public DirectoryScannerUsingThreadPool(String path, PdfCountLogger logger, Object sharedMonitor) {
+    public DirectoryScannerUsingThreadPool(String path, PdfCountLogger logger) {
         this.directoryPath = path;
         this.logger = logger;
-        this.sharedPdfDataMonitor = sharedMonitor;
     }
 
     @Override
@@ -61,20 +62,14 @@ public class DirectoryScannerUsingThreadPool implements DirectoryScanner {
 
     @Override
     public void incrementAndNotify(String threadName) {
-        int currentCount;
-        synchronized (sharedPdfDataMonitor) {
-            pdfCount++;
-            currentCount = pdfCount;
-            String logMsg = String.format("[Printer][%s][%s] PDF count: %d",
-                    "ThreadPool", threadName, currentCount);
-            logger.addLogMessage(logMsg);
-        }
+        int currentCount = pdfCount.incrementAndGet();
+        String logMsg = String.format("[Printer][%s][%s] PDF count: %d",
+                "ThreadPool", threadName, currentCount);
+        logger.addLogMessage(logMsg);
     }
 
     @Override
     public int getPdfCount() {
-        synchronized (sharedPdfDataMonitor) {
-            return pdfCount;
-        }
+        return pdfCount.get();
     }
 }

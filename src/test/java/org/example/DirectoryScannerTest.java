@@ -25,7 +25,7 @@ class DirectoryScannerTest {
         Object monitor = new Object();
         PdfCountLogger logger = new PdfCountLogger(monitor);
         DirectoryScannerUsingThreadPool scanner = new DirectoryScannerUsingThreadPool(
-                tempDir.toString(), logger, monitor);
+                tempDir.toString(), logger);
 
         scanner.countPdfs();
 
@@ -37,7 +37,7 @@ class DirectoryScannerTest {
         Object monitor = new Object();
         PdfCountLogger logger = new PdfCountLogger(monitor);
         DirectoryScannerUsingThreadPool scanner = new DirectoryScannerUsingThreadPool(
-                tempDir.toString(), logger, monitor);
+                tempDir.toString(), logger);
 
         scanner.countPdfs();
 
