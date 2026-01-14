@@ -31,7 +31,8 @@ public class Main {
 
         try {
             mainLatch.await();
-            Thread.sleep(500);
+            loggerThread.interrupt();
+            logger.getShutdownLatch().await();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Main thread interrupted while waiting for scanner or logger.");

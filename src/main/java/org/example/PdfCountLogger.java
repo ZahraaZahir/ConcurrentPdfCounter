@@ -2,13 +2,19 @@ package org.example;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.CountDownLatch;
 
 public class PdfCountLogger implements Runnable {
     private final Queue<String> messageQueue = new LinkedList<>();
     private final Object queueMonitor;
+    private final CountDownLatch shutdownLatch = new CountDownLatch(1);
 
     public PdfCountLogger(Object monitor) {
         this.queueMonitor = monitor;
+    }
+
+    public CountDownLatch getShutdownLatch() {
+        return shutdownLatch;
     }
 
     public void addLogMessage(String msg) {
@@ -27,16 +33,12 @@ public class PdfCountLogger implements Runnable {
                     while (messageQueue.isEmpty() && !Thread.currentThread().isInterrupted()) {
                         queueMonitor.wait();
                     }
-
-                    if (Thread.currentThread().isInterrupted() && messageQueue.isEmpty()) {
+                    if (Thread.currentThread().isInterrupted() && messageQueue.isEmpty())
                         break;
-                    }
                     msg = messageQueue.poll();
                 }
-
-                if (msg != null) {
+                if (msg != null)
                     System.out.println(msg);
-                }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -46,13 +48,12 @@ public class PdfCountLogger implements Runnable {
                 synchronized (queueMonitor) {
                     msg = messageQueue.poll();
                 }
-                if (msg != null) {
+                if (msg != null)
                     System.out.println(msg);
-                } else {
+                else
                     break;
-                }
             }
-            System.out.println("Logger thread exiting.");
+            shutdownLatch.countDown();
         }
     }
 }
